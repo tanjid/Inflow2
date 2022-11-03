@@ -139,7 +139,7 @@ class KTTheme:
     # Include favicon from settings
     def includeFavicon():
         # Use static() to use builtin function for assets folder
-        # Refer in _keenthemes/settings.py for STATIC_URL settings
+        # Refer in djangoproject/settings.py for STATIC_URL settings
         return static(settings.KT_THEME_ASSETS['favicon'])
 
 

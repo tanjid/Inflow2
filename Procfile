@@ -1,3 +1,3 @@
 release: python manage.py migrate
-web: gunicorn _keenthemes.wsgi
+web: gunicorn djangoproject.wsgi
 worker: python manage.py qcluster

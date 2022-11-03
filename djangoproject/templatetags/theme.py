@@ -1,6 +1,6 @@
 from django.utils.safestring import mark_safe
 from django import template
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.libs.theme import KTTheme
 from django.conf import settings
 from pprint import pprint
 

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, UpdateView, ListView
 from django.views.generic.edit import CreateView
-from _keenthemes.__init__ import KTLayout
+from djangoproject.__init__ import KTLayout
 from .models import *
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.libs.theme import KTTheme
 from .forms import SignInForm, EmployeeCreationForm
 from django.views.generic.edit import FormMixin
 from django.http import HttpResponse
@@ -27,7 +27,7 @@ class EmployeePermissionEdit(SuccessMessageMixin, UpdateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         em_id = self.kwargs['pk']
         em_permission = EmployeePermission.objects.get(pk=em_id)
@@ -45,7 +45,7 @@ class EmployeePermissionList(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # KTTheme.addJavascriptFile('js/custom/test.js')
@@ -63,7 +63,7 @@ class EmployeeEdit(SuccessMessageMixin, UpdateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         # KTTheme.addJavascriptFile('js/custom/test.js')
         return context
@@ -84,7 +84,7 @@ class EmplyeesHome(CreateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # KTTheme.addJavascriptFile('js/custom/test.js')
@@ -100,7 +100,7 @@ class LoginView(SuccessMessageMixin, FormMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         # status_list = ['Initial', 'Assigned', 'Pending', 'Complete', 'Return']
        
@@ -136,7 +136,7 @@ class CreateEmployeeView(SuccessMessageMixin, FormMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         # status_list = ['Initial', 'Assigned', 'Pending', 'Complete', 'Return']
         return context

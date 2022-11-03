@@ -1,8 +1,8 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from _keenthemes.__init__ import KTLayout
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.__init__ import KTLayout
+from djangoproject.libs.theme import KTTheme
 from django.views.generic.edit import FormMixin
 from .forms import NewPurchaseForm
 from .models import Purchase, PurchaseItems
@@ -19,7 +19,7 @@ class MypageView(TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # KTTheme.addJavascriptFile('js/custom/test.js')
@@ -37,7 +37,7 @@ class PurchaseListView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # KTTheme.addJavascriptFile('js/custom/test.js')
@@ -56,7 +56,7 @@ class NewPurchaseView(FormMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # KTTheme.addJavascriptFile('js/custom/test.js')

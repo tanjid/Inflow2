@@ -1,6 +1,6 @@
 from pprint import pprint
-from _keenthemes.bootstrap import KTBootstrap
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.bootstrap import KTBootstrap
+from djangoproject.libs.theme import KTTheme
 import importlib.util
 import sys
 

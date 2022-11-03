@@ -1,10 +1,10 @@
 from django.conf import settings
 from pprint import pprint
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.libs.theme import KTTheme
 
 """
 This is an entry and Bootstrap class for the theme level.
-The init() function will be called in _keenthemes/__init__.py
+The init() function will be called in djangoproject/__init__.py
 """
 class KTBootstrapDefault:
 

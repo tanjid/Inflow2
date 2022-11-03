@@ -1,9 +1,9 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView
-from _keenthemes.__init__ import KTLayout
+from djangoproject.__init__ import KTLayout
 from .models import *
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.libs.theme import KTTheme
 from django.urls import reverse
 
 from .forms import NewOrderForm
@@ -37,7 +37,7 @@ class TestMessage(SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         context['dm_list'] = DeliveryMethod.objects.all()
@@ -56,7 +56,7 @@ class EditOrder(FormMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         order_id = self.kwargs['order_id']
         order = NewOrder.objects.get(id=order_id)
@@ -155,7 +155,7 @@ class OrderDm(TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         context['status_name'] = self.kwargs['st']
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         context['dm_list'] = DeliveryMethod.objects.all()
@@ -176,7 +176,7 @@ class CompleteListView(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # context['new_order'] = NewOrder.objects.filter(delivery_method=dm, items__status = status_name).distinct()
@@ -213,7 +213,7 @@ class ReturnListView(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # context['new_order'] = NewOrder.objects.filter(delivery_method=dm, items__status = status_name).distinct()
@@ -250,7 +250,7 @@ class CancelListView(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # context['new_order'] = NewOrder.objects.filter(delivery_method=dm, items__status = status_name).distinct()
@@ -286,7 +286,7 @@ class OrderListView(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # context['new_order'] = NewOrder.objects.filter(delivery_method=dm, items__status = status_name).distinct()
@@ -429,7 +429,7 @@ class OrderHome(TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
 
@@ -446,7 +446,7 @@ class OrderHome(TemplateView):
 #         # Call the base implementation first to get a context
 #         context = super().get_context_data(**kwargs)
 
-#         # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+#         # A function to init the global layout. It is defined in djangoproject/__init__.py file
 #         context = KTLayout.init(context)
 #         status_name = self.kwargs['st']
 #         dm = self.kwargs['dm']
@@ -467,7 +467,7 @@ class NewOrderView(SuccessMessageMixin, FormMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         # context['new_order'] = NewOrder.objects.all()
         context['de_m'] = DeliveryMethod.objects.all()
@@ -716,7 +716,7 @@ class SingleConfirmView(TemplateView):
         order = NewOrder.objects.get(id=order_id)
         context['order'] = order
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
 
@@ -735,7 +735,7 @@ class ReturnOrder(TemplateView):
         order = NewOrder.objects.get(id=order_id)
         context['order'] = order
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
 
@@ -824,7 +824,7 @@ class ExchangeOrder(TemplateView):
         order = NewOrder.objects.get(id=order_id)
         context['order'] = order
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
 
@@ -898,7 +898,7 @@ class ExchangeItems(FormMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         order_id = self.kwargs['order_id']
 

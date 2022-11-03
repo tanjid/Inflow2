@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin
-from _keenthemes.__init__ import KTLayout
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.__init__ import KTLayout
+from djangoproject.libs.theme import KTTheme
 from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import QuickSearchForm
@@ -30,7 +30,7 @@ class DashboardsView(LoginRequiredMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         today = datetime.strftime(datetime.now(), '%a')
         today1 = datetime.strftime(datetime.now() - timedelta(1) , '%a')
@@ -144,7 +144,7 @@ class TestFileView(LoginRequiredMixin, TemplateView):
             settings.KT_THEME_DIRECTION = 'ltr'
         """
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         # Include vendors and javascript files for dashboard widgets
@@ -162,7 +162,7 @@ class QuickSearchView(TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         context['form'] = QuickSearchForm()
         try:

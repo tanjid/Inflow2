@@ -3,9 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, FormView
 from django.views.generic.list import ListView
 from django.conf import settings
-from _keenthemes.__init__ import KTLayout
+from djangoproject.__init__ import KTLayout
 from .models import *
-from _keenthemes.libs.theme import KTTheme
+from djangoproject.libs.theme import KTTheme
 from django.urls import reverse
 from django.views.generic.edit import FormMixin
 from .forms import MktNewOrderForm
@@ -19,7 +19,7 @@ class MktHome(TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
 
@@ -41,7 +41,7 @@ class MktNewOrderView(FormMixin,TemplateView):
             shop_n = None
         if shop_n:
             context['shop_name'] = shop_n
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
         context['mkt_shops'] = MktShop.objects.all()
 
@@ -112,7 +112,7 @@ class MktSearch(TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
         try:
@@ -151,7 +151,7 @@ class MktOrdersView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        # A function to init the global layout. It is defined in _keenthemes/__init__.py file
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
 
 
