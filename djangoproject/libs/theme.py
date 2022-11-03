@@ -86,7 +86,7 @@ class KTTheme:
         # Reference to current folder
         svg = open('.' + KTTheme.asset(folder + path)).read()
         output = '<span class="{}">{}</span>'.format(classNames, svg)
-        return output
+        return " "
 
 
     # Get an assets path in assets folder by path
