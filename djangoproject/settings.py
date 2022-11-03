@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'storages',
 ]
-LOGIN_EXEMPT_URLS = ('/assets/css/style.bundle.css', '/assets/plugins/global/plugins.bundle.css', 'forgot-password',)
+LOGIN_EXEMPT_URLS = ('assets/plugins/global/plugins.bundle.css', 'assets/css/style.bundle.css', 'forgot-password',)
 LOGIN_URL = '/employees/login/'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
