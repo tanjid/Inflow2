@@ -12,8 +12,8 @@ class DeliveryMethod(models.Model):
         return str(self.name)
 
 class NewOrder(models.Model):
-    mobille_number = models.CharField(max_length=15)
-    name = models.CharField(max_length=15)
+    mobille_number = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     delivery_method = models.ForeignKey(DeliveryMethod, on_delete=models.RESTRICT, null=True, blank=True)
     note = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
