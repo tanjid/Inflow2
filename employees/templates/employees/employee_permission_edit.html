@@ -1,0 +1,26 @@
+{% extends layout %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+{% block title %}{% translate "Order Home" %}{% endblock %}
+
+{% block content %}
+
+
+
+<div class="card p-10">
+    <h1 class="mb-10">{{em_permission}}</h1>
+<form method="post">
+
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-check form-switch">
+        {{ field }}<label class="form-check-label">{{ field.label }}</label>
+
+    </div>
+    <br>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+</div>
+{% endblock %}

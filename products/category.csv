@@ -1,0 +1,33 @@
+"id","name","created_at","updated_at"
+"1","Bag",NULL,"2019-05-13 01:27:57"
+"2","Belt",NULL,"2019-05-13 01:28:08"
+"3","Hats & Caps",NULL,"2019-05-13 01:28:19"
+"4","Sunglasses",NULL,"2019-05-13 01:28:30"
+"5","Bracelet",NULL,NULL
+"6","Wallet",NULL,"2019-05-13 01:28:42"
+"7","USB Gadgets",NULL,NULL
+"8","Back Support",NULL,"2019-05-13 01:28:54"
+"9","Sunglass",NULL,"2019-05-13 01:29:40"
+"10","Watch",NULL,"2019-05-13 01:29:53"
+"11","Backpack",NULL,"2019-05-13 01:30:33"
+"12","Men",NULL,"2019-05-13 01:30:54"
+"13","Others",NULL,NULL
+"14","Winter Hats",NULL,NULL
+"15","Hand Gloves",NULL,NULL
+"16","Reading Glasses",NULL,NULL
+"17","Audi",NULL,NULL
+"18","BMW",NULL,NULL
+"19","POLICE",NULL,NULL
+"20","Tie",NULL,NULL
+"21","Finger Ring",NULL,NULL
+"22","Print Paper",NULL,NULL
+"23","Trimmers",NULL,NULL
+"24","Nail Cutter",NULL,NULL
+"25","Pocket Watch",NULL,NULL
+"26","Pen",NULL,NULL
+"27","Mobile Pouch",NULL,NULL
+"28","Card Holder",NULL,NULL
+"29","Ladies Purse",NULL,NULL
+"30","Others",NULL,NULL
+"31","Mouse Pad",NULL,NULL
+"32","Key Wallet",NULL,NULL
