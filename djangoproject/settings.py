@@ -32,7 +32,7 @@ DEBUG = True
 # ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['127.0.0.1']
 
-ALLOWED_HOSTS = ["139.162.31.136"]
+ALLOWED_HOSTS = ["139.162.31.136", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -120,6 +120,17 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'djangodb',
+#         'USER': 'postgres',
+#         'PASSWORD': 'admin',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 
 

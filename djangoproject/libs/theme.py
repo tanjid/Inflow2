@@ -84,9 +84,9 @@ class KTTheme:
     # Get SVG icon content
     def getSvgIcon(path, classNames = 'svg-icon', folder = 'media/icons/'):
         # Reference to current folder
-        # svg = open('.' + KTTheme.asset(folder + path)).read()
-        # output = '<span class="{}">{}</span>'.format(classNames, svg)
-        return " "
+        svg = open('.' + KTTheme.asset(folder + path)).read()
+        output = '<span class="{}">{}</span>'.format(classNames, svg)
+        return output
 
 
     # Get an assets path in assets folder by path
