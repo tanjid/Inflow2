@@ -7,23 +7,25 @@ from employees.models import Employee
 
 # Create your models here.
 class ProductCategory(models.Model):
-    name = models.CharField(max_length=20, unique = True,db_index=True)
+    name = models.CharField(max_length=50, unique = True,db_index=True)
+    cat_id = models.CharField(max_length=20, unique = True, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
 
 class ProductBrand(models.Model):
-    name = models.CharField(max_length=20, unique = True, db_index=True)
+    name = models.CharField(max_length=50, unique = True, db_index=True)
+    brand_id = models.CharField(max_length=20, unique = True, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    sku = models.CharField(max_length=20, unique = True,db_index=True)
+    sku = models.CharField(max_length=30, unique = True,db_index=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.DO_NOTHING, null=True, blank=True)
     brand = models.ForeignKey(ProductBrand, on_delete=models.DO_NOTHING, null=True, blank=True)
-    warranty = models.CharField(max_length=20, null=True, blank=True)
+    warranty = models.CharField(max_length=50, null=True, blank=True)
     warranty_policy = models.TextField(null=True, blank=True)
     cost_price = models.IntegerField()
     sell_price = models.IntegerField()
