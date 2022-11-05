@@ -43,7 +43,7 @@
                 <!--begin::Section-->
                 <div class="text-center">
                     <span class="d-block fw-bold fs-1 text-gray-800"> <br></span>
-                    <span class="mt-1 fw-semibold fs-3 text-primary">{{'Initial'|st_order_count}}</span>
+                    <span class="mt-1 fw-semibold fs-3 text-primary">{% u_order_count 'Initial' request.user current_user %}</span>
                 </div>
                 <!--end::Section-->
             </div>
@@ -79,7 +79,7 @@
                 <!--begin::Section-->
                 <div class="text-center">
                     <span class="d-block fw-bold fs-1 text-gray-800"> <br></span>
-                    <span class="mt-1 fw-semibold fs-3 text-info">{{'Printed'|st_order_count}}</span>
+                    <span class="mt-1 fw-semibold fs-3 text-info">{% u_order_count 'Printed' request.user current_user %}</span>
                 </div>
                 <!--end::Section-->
             </div>
@@ -114,7 +114,7 @@
                 <!--begin::Section-->
                 <div class="text-center">
                     <span class="d-block fw-bold fs-1 text-gray-800"> <br></span>
-                    <span class="mt-1 fw-semibold fs-3 text-warning">{{'Shipping'|st_order_count}}</span>
+                    <span class="mt-1 fw-semibold fs-3 text-warning">{% u_order_count 'Shipping' request.user current_user %}</span>
                 </div>
                 <!--end::Section-->
             </div>
@@ -150,7 +150,7 @@
                 <!--begin::Section-->
                 <div class="text-center">
                     <span class="d-block fw-bold fs-1 text-gray-800"> <br></span>
-                    <span class="mt-1 fw-semibold fs-3 text-success">{{'Complete'|st_order_count}}</span>
+                    <span class="mt-1 fw-semibold fs-3 text-success">{% u_order_count 'Complete' request.user current_user %}</span>
                 </div>
                 <!--end::Section-->
             </div>
@@ -187,7 +187,7 @@
                 <!--begin::Section-->
                 <div class="text-center">
                     <span class="d-block fw-bold fs-1 text-gray-800"> <br></span>
-                    <span class="mt-1 fw-semibold fs-3 text-dark">{{'Cancel'|st_order_count}}</span>
+                    <span class="mt-1 fw-semibold fs-3 text-dark">{% u_order_count 'Cancel' request.user current_user %}</span>
                 </div>
                 <!--end::Section-->
             </div>
@@ -223,7 +223,7 @@
                 <!--begin::Section-->
                 <div class="text-center">
                     <span class="d-block fw-bold fs-1 text-gray-800"> <br></span>
-                    <span class="mt-1 fw-semibold fs-3 text-danger">{{'Return'|st_order_count}}</span>
+                    <span class="mt-1 fw-semibold fs-3 text-danger">{% u_order_count 'Return' request.user current_user %}</span>
                 </div>
                 <!--end::Section-->
             </div>

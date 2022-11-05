@@ -1,6 +1,6 @@
 from django import template
 from orders.models import NewOrder, OrderDetails
-from employees.models import Employee
+from employees.models import Employee, EmployeePermission
 from django.utils.safestring import mark_safe
 from django.core.paginator import Paginator
 register = template.Library()
@@ -33,6 +33,32 @@ def calculate_qty(value):
 
     return quantity
 
+
+@register.filter(name='get_order_style')
+def get_order_style(value):
+    if value == "Initial":
+        color= "primary"
+    elif value == "Printed":
+        color= "info"
+    elif value == "Shipping":
+        color= "warning"
+    elif value == "Complete":
+        color= "success"
+    elif value == "Cancel":
+        color= "dark"
+    else:
+        color = "danger"
+    return color
+
+
+
+@register.simple_tag
+def check_permission(status, user):
+    show = True
+
+    return show
+
+
 @register.simple_tag
 def cal_item_qty(list, sku):
 
@@ -62,17 +88,34 @@ def calculate_all_qty(value):
     return quantity
 
 
-@register.filter(name='st_order_count')
-def st_order_count(value):
-    # order_count = NewOrder.objects.filter(items__status=value).distinct().count()
-    order_count = OrderDetails.objects.filter(status=value).distinct('main_order').count()
+# @register.filter(name='st_order_count')
+# def st_order_count(value):
+#     # order_count = NewOrder.objects.filter(items__status=value).distinct().count()
+#     # company_name= Employee.objects.get(user=user).assigned_company
+#     order_count = OrderDetails.objects.filter(status=value).distinct('main_order').count()
+#     return order_count
+
+
+@register.simple_tag
+def u_order_count( st, user, current_user):
+    
+    if current_user.show_all_orders:
+
+        order_count = OrderDetails.objects.filter(status=st).distinct('main_order').count()
+    else:
+        company_name= Employee.objects.get(user=user).assigned_company
+        order_count = OrderDetails.objects.filter(status=st, main_order__company=company_name).distinct('main_order').count()
     return order_count
 
 
 @register.simple_tag
-def order_dm_count( st, dm, user):
+def order_dm_count( st, dm, user, current_user):
     company_name= Employee.objects.get(user=user).assigned_company
-    order_count = OrderDetails.objects.filter(main_order__delivery_method=dm, status=st, main_order__company=company_name).distinct('main_order').count()
+    if current_user.show_all_orders:
+        order_count = OrderDetails.objects.filter(main_order__delivery_method=dm, status=st).distinct('main_order').count()
+    else:
+        company_name= Employee.objects.get(user=user).assigned_company   
+        order_count = OrderDetails.objects.filter(main_order__delivery_method=dm, status=st, main_order__company=company_name).distinct('main_order').count()
     return order_count
     
 @register.simple_tag

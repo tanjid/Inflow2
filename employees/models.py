@@ -189,6 +189,9 @@ class EmployeePermission(models.Model):
 
     mkt = models.BooleanField(default=False)
 
+    show_all_orders = models.BooleanField(default=False)
+
+
 
 
     def __str__(self):

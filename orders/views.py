@@ -10,7 +10,7 @@ from .forms import NewOrderForm
 from django.contrib import messages
 from django.http import JsonResponse
 from products.models import Product
-from employees.models import Employee
+from employees.models import Employee, EmployeePermission
 from django.views.generic.edit import FormMixin
 import random
 from .models import NewOrder, OrderDetails
@@ -308,7 +308,11 @@ class OrderListView(LoginRequiredMixin, ListView):
         status_name = self.kwargs['st']
         dm = self.kwargs['dm']
         company_name = Employee.objects.get(user=self.request.user).assigned_company
-        new_order = NewOrder.objects.filter(delivery_method=dm, orderdetails__status = status_name, company = company_name).distinct()
+        em_perm = EmployeePermission.objects.get(user=self.request.user)
+        if em_perm.show_all_orders:
+            new_order = NewOrder.objects.filter(delivery_method=dm, orderdetails__status = status_name).distinct()
+        else:
+            new_order = NewOrder.objects.filter(delivery_method=dm, orderdetails__status = status_name, company = company_name).distinct()
         return new_order
 
         
