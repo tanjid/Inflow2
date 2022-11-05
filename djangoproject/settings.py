@@ -128,11 +128,20 @@ DATABASES = {
         'USER': 'pgadmin',
         'PASSWORD': 'secure_password',
         'HOST': '139.162.8.254',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'djangodb',
+#         'USER': 'djangouser',
+#         'PASSWORD': 'm0d1fyth15',
+#         'HOST': '139.162.31.136',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
