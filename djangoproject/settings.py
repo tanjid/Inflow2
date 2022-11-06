@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'orderlist',
     'widget_tweaks',
     'storages',
+    'logs',
 ]
 LOGIN_EXEMPT_URLS = ('assets/plugins/global/plugins.bundle.css', 'assets/css/style.bundle.css', 'forgot-password',)
 LOGIN_URL = '/employees/login/'

@@ -115,6 +115,7 @@
                     Print</button>
                 {% endif %}
             </div>
+        </form>
         <thead>
             <tr class="fw-bold text-muted">
                 <th class="w-25px">
@@ -160,8 +161,9 @@
                         class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{ order.created_at.date|date:"d-m-Y" }}</a>
                 </td>
                 <td>
-                    <a href="#"
-                        class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{order.invoice_number}}</a>
+                    <a href="{% url 'logs_view'  order.invoice_number %}"
+                        class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6" target="_0
+                        blank">{{order.invoice_number}}</a>
                 </td>
                 <td>
                     <a href="#"

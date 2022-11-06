@@ -540,6 +540,40 @@
 				<!--end:Menu sub-->
 			</div>
 			{% endif %}
+
+			{% if current_user.mkt %}
+			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if '/logs/' in request.path %}show{% endif %}">
+				<!--begin:Menu link-->
+				<span class="menu-link">
+					<span class="menu-icon">{% getSvgIcon 'duotune/abstract/abs042.svg' 'svg-icon svg-icon-2' %}</span>
+					<span class="menu-title">Logs</span>
+					<span class="menu-arrow"></span>
+				</span>
+				<!--end:Menu link-->
+				<!--begin:Menu sub-->
+				<div class="menu-sub menu-sub-accordion">
+					<!--begin:Menu item-->
+					<div class="menu-item">
+
+						<!--begin:Menu link-->
+						<!--end:Menu link-->
+						
+						<!--begin:Menu link-->
+						<a class="menu-link {% if request.path == '/mkt/home/' %}active{% endif %}" href="{% url 'logs_home' %}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">Logs Home</span>
+						</a>
+						<!--end:Menu link-->
+
+
+					</div>
+					<!--end:Menu item-->
+				</div>
+				<!--end:Menu sub-->
+			</div>
+			{% endif %}
 		</div>
 		<!--end::Menu-->
 	</div>

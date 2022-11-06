@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from products.models import Product
 from employees.models import Employee, EmployeePermission
+from logs.models import OrderLog
 from django.views.generic.edit import FormMixin
 import random
 from .models import NewOrder, OrderDetails
@@ -142,6 +143,13 @@ class EditOrder(FormMixin, TemplateView):
                 selected_sku.decrese_stock(int(qtys[i]))
                 # selected_sku.save()
 
+            
+            # Storing Order Log
+            OrderLog.objects.create(
+                order = order,
+                details = f"Order Edited by {order.employee}"
+            )
+            
             messages.add_message(request, messages.SUCCESS, f'Order Edited to Successfully')
             return redirect("edit_order", order_id=order_id)
         else:
@@ -322,7 +330,7 @@ class OrderListView(LoginRequiredMixin, ListView):
         dm = self.kwargs['dm']
         dm = DeliveryMethod.objects.get(pk=dm)
         date_time = datetime.now(UTC)
-        
+        current_employee = Employee.objects.get(user=request.user)
         if 'bulk' in request.POST:
             print(request.POST)
             orders = request.POST.getlist('selected-order')
@@ -334,7 +342,11 @@ class OrderListView(LoginRequiredMixin, ListView):
                     # order.save()
                     bulk_update_list.append(order)
                 OrderDetails.objects.bulk_update(bulk_update_list, ['status'])
-            
+            # Storing Order Log
+            OrderLog.objects.create(
+                order = my_order,
+                details = f"Status Updated to Shipping by {current_employee}"
+            )
             
             messages.add_message(request, messages.SUCCESS, f'{len(orders)} Orders sent to shipping')
             return redirect('test_message')
@@ -364,6 +376,12 @@ class OrderListView(LoginRequiredMixin, ListView):
                     count += 1
             
                 OrderDetails.objects.bulk_update(bulk_update_list, ['status'])
+                
+                # Storing Order Log
+                OrderLog.objects.create(
+                    order = my_order,
+                    details = f"Status Updated to Printed by {current_employee}"
+                )
             list_dict = {}
             for item in order_list:
                 for it in item.orderdetails_set.all():
@@ -559,6 +577,11 @@ class NewOrderView(SuccessMessageMixin, FormMixin, TemplateView):
                 # selected_sku.stock_qty = int(selected_sku.stock_qty - int(qtys[i]))
                 # selected_sku.save()
 
+            # Storing Order Log
+            OrderLog.objects.create(
+                order = new_order,
+                details = f"Order Created by {new_order.employee}"
+            )
             messages.add_message(request, messages.SUCCESS, 'Order Created Successfully')
 
             # Add Ponts to Employee
@@ -657,6 +680,13 @@ def confirm_order(request, order_id):
             # Add Ponts to Employee
             current_employee = Employee.objects.get(user=request.user)
             current_employee.add_points("complete_order")
+            
+            # Store Order Log
+            OrderLog.objects.create(
+                order = orders,
+                details = f"Status Updated to Complete by {current_employee}"
+            )
+
         else:
             messages.add_message(request, messages.ERROR, f'{order.sku} of {orders.invoice_number} is not in Cant be confirmed because its in {order.status}')
 
@@ -689,14 +719,20 @@ def confirm_single(request, order_id):
     current_employee = Employee.objects.get(user=request.user)
     current_employee.add_points("complete_order")
 
-
+    # Storing Order Log
+    OrderLog.objects.create(
+        order = main_order_details.main_order,
+        details = f"{main_order_details.sku} Confirmed by {current_employee}"
+    )
     messages.add_message(request, messages.SUCCESS, f'{main_order_details.sku} Confirmed Successfully!')
+    
+    
     return redirect('confirm_sigle_order',  order_id=main_order_details.main_order.id)
 
 
 def cancel_order(request, order_id):
     main_order = NewOrder.objects.get(pk=order_id)
-
+    current_employee = Employee.objects.get(user=request.user)
     for item in main_order.orderdetails_set.all():
         # Increase Stock qty for cancel order
         slec_product = Product.objects.get(sku=item.sku)
@@ -706,9 +742,14 @@ def cancel_order(request, order_id):
         item.status = "Cancel"
         item.save()
 
+    OrderLog.objects.create(
+        order = main_order,
+        details = f"Cancelled by {current_employee}"
+    )
+
 
     messages.add_message(request, messages.SUCCESS, 'Order Cancel Successful')
-    return redirect('test_message')
+    return redirect('index')
 
 
 class SingleConfirmView(TemplateView):
@@ -775,7 +816,10 @@ class ReturnOrder(TemplateView):
                 main_order_details.qty = int(input_qty)
                 main_order_details.save()
                 
-
+                OrderLog.objects.create(
+                    order = main_order_details.main_order,
+                    details = f"Qty of {slec_product} Changed by {current_employee}"
+                )
 
                 messages.add_message(request, messages.SUCCESS, 'Qty Changed Successfully')
                 return redirect('return_order',  order_id=order_id)
@@ -788,6 +832,11 @@ class ReturnOrder(TemplateView):
             order = NewOrder.objects.get(id=order_id)
             order.return_note = request.POST.get('rtn_note')
             order.save()
+            current_employee = Employee.objects.get(user=request.user)
+            OrderLog.objects.create(
+                order = order,
+                details = f"Rtn Note : {order.return_note} by {current_employee}"
+            )
             messages.add_message(request, messages.SUCCESS, 'Return note added')
             return redirect('return_order',  order_id=order_id)
 
@@ -813,6 +862,10 @@ class ReturnOrder(TemplateView):
                     # Add Ponts to Employee
                     current_employee = Employee.objects.get(user=request.user)
                     current_employee.add_points("return_order")
+                    OrderLog.objects.create(
+                        order = order,
+                        details = f"All Returned by {current_employee}"
+                    )
                 else:
                     messages.add_message(request, messages.ERROR, f'{item.sku} is not Returned Because its in  {item.status}')
             return redirect('return_order',  order_id=order_id)
@@ -893,7 +946,7 @@ def exchange_item(request, order_id):
     # update order status
     main_order_details.status = "Exchange"
     main_order_details.save()
-    return redirect('test_message')
+    return redirect('index')
 
 class ExchangeItems(FormMixin, TemplateView):
     template_name = 'orders/edit_order.html'
@@ -911,9 +964,13 @@ class ExchangeItems(FormMixin, TemplateView):
         # update order status
         order_details.status = "Exchange"
         order_details.save()
-
+        current_employee = Employee.objects.get(user=self.request.user)
+        OrderLog.objects.create(
+            order = order_details.main_order,
+            details = f"Status Update to Exchange by {current_employee}"
+            )
         order = order_details.main_order
-        print(f"order_details {order_details}")
+        # print(f"order_details {order_details}")
         initial_dict = {
             "name" : order.name,
             "number" : order.mobille_number,
@@ -931,7 +988,7 @@ class ExchangeItems(FormMixin, TemplateView):
         context['order_details'] = [order_details]
         context['de_m'] = DeliveryMethod.objects.all()
         context['delivery_method'] = order.delivery_method
-        print(f"order.delivery_method {order.delivery_method}")
+        # print(f"order.delivery_method {order.delivery_method}")
         KTTheme.addJavascriptFile('js/custom/order_edit.js')
         return context
         # KTTheme.addJavascriptFile('js/custom/test.js')
@@ -1017,9 +1074,8 @@ class ROrderListView(LoginRequiredMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         company = Employee.objects.get(user = request.user)
-
+        current_employee = Employee.objects.get(user=request.user)
         if 'bulk' in request.POST:
-            print(request.POST)
             orders = request.POST.getlist('selected-order')
             for order in orders:
                 my_order = NewOrder.objects.get(pk=order)
@@ -1029,6 +1085,11 @@ class ROrderListView(LoginRequiredMixin, ListView):
                     # order.save()
                     bulk_update_list.append(order)
                 OrderDetails.objects.bulk_update(bulk_update_list, ['status'])
+
+                OrderLog.objects.create(
+                order = order,
+                details = f"Status Updated to Shipping by {current_employee}"
+                )
             
             
             messages.add_message(request, messages.SUCCESS, f'{len(orders)} Orders sent to shipping')
@@ -1050,15 +1111,17 @@ class ROrderListView(LoginRequiredMixin, ListView):
                     bulk_update_list.append(order)
 
                     if count == 0:
-                        print(f"0")
                         order_list.append(my_order)
                     elif count == 1:
-                        print(f"1")
                         multi_order_list.append(my_order)
                         order_list.remove(my_order)
                     count += 1
             
                 OrderDetails.objects.bulk_update(bulk_update_list, ['status'])
+                OrderLog.objects.create(
+                order = order,
+                details = f"Status Updated to Printed by {current_employee}"
+                )
             list_dict = {}
             for item in order_list:
                 for it in item.orderdetails_set.all():

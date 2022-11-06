@@ -13,6 +13,7 @@ from employees.models import Employee, EmplpyeePoints
 from django.db.models import Avg, Count, Min, Sum
 import csv
 from orders.models import OrderDetails
+from logs.models import OrderLog
 """
 This file is a view controller for multiple pages as a module.
 Here you can override the page view layout.
@@ -156,7 +157,6 @@ class QuickSearchView(TemplateView):
     # Default template file
     # Refer to dashboards/urls.py file for more pages and template files
     template_name = 'dashboards/quick_search.html'
-    login_url = '/employees/login/'
     # Predefined function
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -193,7 +193,11 @@ class QuickSearchView(TemplateView):
             # Add Ponts to Employees
             current_employee.add_points("ad_note")
 
-
+            # Storing Order Log
+            OrderLog.objects.create(
+                order = main_order,
+                details = f"note '{note}' added by {current_employee}"
+                )
 
             messages.add_message(request, messages.SUCCESS, f'Note added to {main_order.invoice_number}')
             context['orders'] = [main_order]
@@ -201,9 +205,7 @@ class QuickSearchView(TemplateView):
             search_contetn_o = request.POST.get('search_contetn_o')
             if search_contetn_m:
                 context['orders'] = NewOrder.objects.filter(mobille_number__icontains = search_contetn_m)
-                print(f"search_contetn_m: {search_contetn_m}")
             elif search_contetn_o:
-                print(f"search_contetn_o: {search_contetn_o}")
                 context['orders'] = NewOrder.objects.filter(invoice_number = search_contetn_o)
 
 
@@ -222,7 +224,11 @@ class QuickSearchView(TemplateView):
             # Add Ponts to Employee
             current_employee.add_points("rtn_note")
 
-
+            # Storing Order Log
+            OrderLog.objects.create(
+                order = main_order,
+                details = f"Rtn-note '{note}' added by {current_employee}"
+                )
             messages.add_message(request, messages.SUCCESS, f'Rtn Note added to {main_order.invoice_number}')
             context['orders'] = [main_order]
             search_contetn_m = request.POST.get('search_contetn_m')

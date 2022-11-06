@@ -1,0 +1,26 @@
+{% extends layout %}
+
+{% load i18n %}
+
+{% block title %}
+	{% translate "Logs" %}
+{% endblock %}
+{% load orders_extra %}
+{% block content %}
+	<h1>Logs Home</h1>
+
+<form action="" method="post">
+	{% csrf_token %}
+	{{form}}
+	<button type="submit">Submit</button>
+</form>
+
+{% if log %}
+{% for i in log %}
+<h1>{{i.details}}</h1> at <h1>{{i.time}}</h1>
+{% endfor %}
+{% else %}
+<h1>No log for this order</h1>
+{% endif %}
+
+{% endblock %}
