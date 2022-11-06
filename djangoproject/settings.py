@@ -120,17 +120,33 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 #         'PORT': '',
 #     }
 # }
-
-DATABASES = {
-    'default': {
+DEV_MODE = os.getenv("DEV_MODE", "False") == "True"
+if DEV_MODE:
+    print("true")
+    DATABASES = {
+            'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testdb',
-        'USER': 'pgadmin',
-        'PASSWORD': 'secure_password',
-        'HOST': '139.162.8.254',
-        'PORT': '',
+        'NAME': 'RetailBD_new', 
+        'USER': 'postgres', 
+        'PASSWORD': 'admin',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
     }
-}
+
+    }
+else:
+    print("Fas")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'testdb',
+            'USER': 'pgadmin',
+            'PASSWORD': 'secure_password',
+            'HOST': '139.162.8.254',
+            'PORT': '',
+        }
+    }
+
 
 # DATABASES = {
 #     'default': {
