@@ -131,7 +131,7 @@
                 ">
                   <span style="text-align: left; font-size: 13px">
                     <div style="font-family: 'Libre Barcode 39 Extended Text', cursive; font-size: 50px;">
-                      {{order.invoice_number}}</div>
+                      *{{order.invoice_number}}*</div>
                   </span>
                 </div>
               </div>
@@ -266,7 +266,7 @@
                   <div class="col-6">
                     <span style="font-size: 13px">
                       <div style="font-family: 'Libre Barcode 39 Extended Text', cursive; font-size: 50px;">
-                        {{order.invoice_number}}</div>
+                        *{{order.invoice_number}}*</div>
                     </span>
                     <br />
                     <span style="font-weight: 600">{{ order.delivery_method|make_list|slice:'0:3'|join:'' }}</span>
