@@ -380,6 +380,17 @@
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<!--begin:Menu link-->
+						<a class="menu-link {% if request.path == '/inventory/ad_new_product/' %}active{% endif %}" href="{% url 'ad_new_product' %}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+							<span class="menu-title">Add New Product</span>
+						</a>
+						<!--end:Menu link-->
+					</div>
+					<!--begin:Menu item-->
+					<div class="menu-item">
+						<!--begin:Menu link-->
 						<a class="menu-link {% if request.path == '/inventory/current_stock_list/' %}active{% endif %}" href="{% url 'current_stock_list' %}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>

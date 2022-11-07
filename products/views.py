@@ -12,6 +12,18 @@ from .forms import AdjustStockForm
 from django.db.models import Q
 import csv
 # Create your views here.
+class AddNewProductView(TemplateView):
+    template_name = 'products/new_product.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # A function to init the global layout. It is defined in djangoproject/__init__.py file
+        context = KTLayout.init(context)
+
+        return context
+
 class CurrentStockListView(ListView):
     model = Product
     template_name = 'products/current_stock_list.html'
