@@ -1,4 +1,4 @@
-
+import datetime
 # Create your models here.
 
 from django.db import models
@@ -33,6 +33,7 @@ class Product(models.Model):
     stock_qty = models.IntegerField(null=True, blank=True, default=0)
     product_image = models.ImageField(null=True, blank=True, default="default.jpg", upload_to='products/')
     current_stock_status = models.BooleanField(default=True)
+    last_sold = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return str(self.sku)
@@ -40,6 +41,7 @@ class Product(models.Model):
 
     def decrese_stock(self, qty):
         self.stock_qty -= qty
+        self.last_sold = datetime.datetime.today()
         self.save()
 
         # Check for stock notification

@@ -1,10 +1,25 @@
+
 let rowIdx = $('#itemTable tr').length - 1;
 function calculateGrandTotal() {
     if (isNaN($('#id_sub_total').val())) {
         $('#id_sub_total').val(0)
     }
-
-    $('#id_grand_total').val(parseInt($('#id_sub_total').val()) + parseInt($('#id_delivery_charge').val()) - parseInt($('#id_advance').val()) - parseInt($('#id_discount').val()))
+    let delivery_charge = parseInt($('#id_delivery_charge').val())
+    if (isNaN(delivery_charge)) {
+        delivery_charge = 0
+        $('#id_delivery_charge').val(0)
+    }
+    let advance = parseInt($('#id_advance').val())
+    if (isNaN(advance)) {
+        advance = 0
+        $('#id_advance').val(0)
+    }
+    let discount = parseInt($('#id_discount').val())
+    if (isNaN(discount)) {
+        discount = 0
+        $('#id_discount').val(0)
+    }
+    $('#id_grand_total').val(parseInt($('#id_sub_total').val()) + delivery_charge - advance - discount)
 }
 
 function itemTotalCalculation() {

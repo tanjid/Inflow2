@@ -14,6 +14,7 @@ from django.db.models import Avg, Count, Min, Sum
 import csv
 from orders.models import OrderDetails
 from logs.models import OrderLog
+from products.models import Product
 """
 This file is a view controller for multiple pages as a module.
 Here you can override the page view layout.
@@ -113,6 +114,10 @@ class DashboardsView(LoginRequiredMixin, TemplateView):
         context['total_order_count'] = total_order_count
         context['total_sku_count'] = total_sku_count
 
+        last_month_date = today - timedelta(30)
+        print(f"last_month_date: {last_month_date}")
+        uns_products = Product.objects.filter(last_sold__lt = last_month_date, stock_qty__gt = 10).order_by('-stock_qty')
+        context['uns_products'] = uns_products
         return context
 
 def approve_order(request, order_id):
@@ -246,9 +251,11 @@ class QuickSearchView(TemplateView):
             return self.render_to_response(context)
 
         if 'invoice' in request.POST:
+            print("in post")
             multi_order_list = []
             order_list = []
             orders = request.POST.getlist('selected-order')
+            print(orders)
 
 
         # Sorting Order for prnting sku wise

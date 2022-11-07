@@ -20,6 +20,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView
 from pytz import timezone
 from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 UTC = timezone('Asia/Kolkata')
@@ -687,9 +688,29 @@ def confirm_order(request, order_id):
                 details = f"Status Updated to Complete by {current_employee}"
             )
 
+
+ 
         else:
             messages.add_message(request, messages.ERROR, f'{order.sku} of {orders.invoice_number} is not in Cant be confirmed because its in {order.status}')
 
+
+    # Check to update CompleteOrderData
+    all_confirm = True
+    main_order = orders
+
+    for order in main_order.orderdetails_set.all():
+        print(order.status)
+        if order.status != "Complete":
+            all_confirm = False
+
+    if all_confirm:
+        try:
+            com_order = CompleteOrderData.objects.get(order = main_order)
+        except ObjectDoesNotExist:
+            com_order = CompleteOrderData.objects.create(
+                order = main_order,
+                final_status = "Complete"
+            ) 
     return redirect('search_for_confirm', res = 'con')
 
 
@@ -706,6 +727,24 @@ def return_single(request, order_id):
     current_employee = Employee.objects.get(user=request.user)
     current_employee.add_points("return_order")
     
+    # Check to update CompleteOrderData
+    all_return = True
+    main_order = main_order_details.main_order
+
+    for order in main_order.orderdetails_set.all():
+        if order.status != "Return":
+            all_return = False
+
+    if all_return:
+        try:
+            com_order = CompleteOrderData.objects.get(order = main_order)
+        except ObjectDoesNotExist:
+            com_order = CompleteOrderData.objects.create(
+                order = main_order,
+                final_status = "Return"
+            )
+
+
     messages.add_message(request, messages.SUCCESS, f'{main_order_details.sku} Returned Successfully!')
     return redirect('return_order',  order_id=main_order_details.main_order.id)
 
@@ -725,7 +764,23 @@ def confirm_single(request, order_id):
         details = f"{main_order_details.sku} Confirmed by {current_employee}"
     )
     messages.add_message(request, messages.SUCCESS, f'{main_order_details.sku} Confirmed Successfully!')
-    
+
+    # Check to update CompleteOrderData
+    all_confirm = True
+    main_order = main_order_details.main_order
+
+    for order in main_order.orderdetails_set.all():
+        if order.status != "Complete":
+            all_confirm = False
+
+    if all_confirm:
+        try:
+            com_order = CompleteOrderData.objects.get(order = main_order)
+        except ObjectDoesNotExist:
+            com_order = CompleteOrderData.objects.create(
+                order = main_order,
+                final_status = "Complete"
+            )
     
     return redirect('confirm_sigle_order',  order_id=main_order_details.main_order.id)
 
@@ -851,7 +906,6 @@ class ReturnOrder(TemplateView):
 
             order_details = order.orderdetails_set.all()
             for item in order_details:
-                print(item)
                 if item.status == "Shipping":
                     item.status = "Return"
                     item.save()
@@ -866,8 +920,26 @@ class ReturnOrder(TemplateView):
                         order = order,
                         details = f"All Returned by {current_employee}"
                     )
+
+               
                 else:
                     messages.add_message(request, messages.ERROR, f'{item.sku} is not Returned Because its in  {item.status}')
+
+            # Check to update CompleteOrderData
+            all_rtn = True
+            main_order = order
+            for order in main_order.orderdetails_set.all():
+                if order.status != "Return":
+                    all_rtn = False
+
+            if all_rtn:
+                try:
+                    com_order = CompleteOrderData.objects.get(order = main_order)
+                except ObjectDoesNotExist:
+                    com_order = CompleteOrderData.objects.create(
+                        order = main_order,
+                        final_status = "Return"
+                    )    
             return redirect('return_order',  order_id=order_id)
             # return redirect('search_for_confirm', res='rtn')
 

@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(NewOrder)
 admin.site.register(OrderDetails)
 admin.site.register(DeliveryMethod)
+admin.site.register(CompleteOrderData)

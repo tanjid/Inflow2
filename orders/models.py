@@ -26,7 +26,7 @@ class NewOrder(models.Model):
     discount = models.IntegerField(null=True, blank=True,)
     delivery_charge = models.IntegerField(null=True, blank=True,)
     total_price = models.IntegerField(null=True, blank=True,)
-    invoice_number = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    invoice_number = models.CharField(max_length=50, null=True, blank=True, unique=True, db_index=True)
     employee = models.ForeignKey(Employee, on_delete=models.RESTRICT,null=True, blank=True,)
     company = models.ForeignKey(Company, on_delete=models.RESTRICT,null=True, blank=True,)
     is_active = models.BooleanField(default=False)
@@ -47,7 +47,11 @@ class NewOrder(models.Model):
             self.in_review = True
             self.save()
 
-
+class CompleteOrderData(models.Model):
+    order = models.OneToOneField(NewOrder, db_index=True, on_delete = models.RESTRICT)
+    final_status = models.CharField(max_length=50)
+    after_rtn_note = models.TextField(null=True, blank=True)
+    after_verf = models.BooleanField(default=False)
 
 class OrderDetails(models.Model):
     main_order = models.ForeignKey(NewOrder, on_delete=models.CASCADE, null=True, blank=True,)
