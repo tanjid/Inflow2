@@ -176,3 +176,22 @@ def label_formatter(label_list, count):
 def data_formatter(total_point_list, count):
     name = total_point_list[int(count)-1]
     return name
+
+
+@register.simple_tag
+def status_color_selector(status):
+    if status == "Return":
+        color = "danger"
+    elif status == "Initial":
+        color = "primary"
+    elif status == "Printed":
+        color = "info"
+    elif status == "Shipping":
+        color = "warning"
+    elif status == "Complete":
+        color = "success"
+    elif status == "Cancel":
+        color = "dark"
+    else:
+        color = "secondary"
+    return color

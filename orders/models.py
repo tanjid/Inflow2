@@ -52,7 +52,9 @@ class CompleteOrderData(models.Model):
     final_status = models.CharField(max_length=50)
     after_rtn_note = models.TextField(null=True, blank=True)
     after_verf = models.BooleanField(default=False)
-
+    
+    def __str__(self):
+        return str(self.order)
 class OrderDetails(models.Model):
     main_order = models.ForeignKey(NewOrder, on_delete=models.CASCADE, null=True, blank=True,)
     Initial = 'Initial'

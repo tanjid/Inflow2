@@ -4,6 +4,7 @@
 
 
 {% block content %}
+{% if request.user.is_superuser %}
 {% if current_user.dashboard %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -424,5 +425,6 @@
 </script>
 {% else %}
 <p>Permission Denied</p>
+{% endif %}
 {% endif %}
 {% endblock %}

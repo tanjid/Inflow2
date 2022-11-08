@@ -4,4 +4,143 @@
 
 
 {% block content %}
+
+<h1>Welcome {{current_user}}</h1>
+
+<div class="card mb-5 mb-xl-8">
+    <!--begin::Header-->
+    <div class="card-header border-0 pt-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bold fs-3 mb-1">Order Without After Rtn Verification <span class="badge badge-square badge-danger">{{com_order_data|length}}</span></span>
+        </h3>
+
+    </div>
+    <!--end::Header-->
+    <!--begin::Body-->
+    <div class="card-body py-3">
+        <!--begin::Table container-->
+        <div class="table-responsive">
+            <!--begin::Table-->
+            <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+                <!--begin::Table head-->
+                <thead>
+                    <tr class="fw-bold text-muted">
+                        <th class="w-25px">
+                            #
+                        </th>
+                        <th class="min-w-120px">Invoice Number</th>
+                        <th class="min-w-120px">Order Date</th>
+                        <th class="min-w-120px">Name</th>
+                        <th class="min-w-120px">Number</th>
+                        <th class="min-w-120px">Note</th>
+                        <th class="min-w-120px">Rtn Note</th>
+                        <th class="min-w-120px">After Rtn Note</th>
+                        <th class="min-w-120px">Sku</th>
+                        <th class="min-w-120px">Qty</th>
+                        <th class="min-w-120px">Status</th>
+                        <th class="min-w-100px">Total Tk</th>
+                    </tr>
+                </thead>
+                <!--end::Table head-->
+                <!--begin::Table body-->
+                <tbody>
+
+                    {% for obj in com_order_data|slice:":10" %}
+                    <tr>
+                        <td>
+                            <a href="#" class="text-dark fw-bold text-hover-primary fs-6">{{forloop.counter}}</a>
+                        </td>
+                        <td>
+                            <a href="#"
+                                class="text-dark fw-bold text-hover-primary fs-6">{{obj.order.invoice_number}}</a>
+                        </td>
+                        <td>
+                            <a href="#"
+                                class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{obj.order.created_at|date:"d-M-Y"}}</a>
+                        </td>
+                        <td>
+                            <span href="#"
+                                class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{obj.order.name }}</span>
+                        </td>
+                        <td>
+                            <span href="#"
+                                class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{obj.order.mobille_number }}</span>
+                        </td>
+                        <td>
+                            <span href="#"
+                                class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{obj.order.note }}</span>
+                        </td>
+                        <td>
+                            <span href="#"
+                                class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{obj.order.return_note }}</span>
+                        </td>
+                        <td>
+                            <div>
+                                <span
+                                    class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{% if order.return_note %}{{order.return_note}}{% endif %}</span>
+                                <button type="button" class="badge badge-light-danger" data-bs-toggle="modal"
+                                    data-bs-target="#r_kt_modal_{{obj.order.id}}">Add Rtn Note</button>
+                                <div class="modal fade" tabindex="-1" id="r_kt_modal_{{obj.order.id}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <div class="modal-body">
+                                                <form action="" method="post" autocomplete="off">
+                                                    {% csrf_token %}
+                                                    <div class="rounded border d-flex flex-column p-10">
+                                                        <input type="hidden" value="{{obj.order.id}}" name="order_id">
+                                                        <label for="" class="form-label">Add After Rtn Note to
+                                                            {{obj.order.invoice_number}}</label>
+                                                        <div class="autocomplete">
+                                                            <textarea class="form-control aut_sug" name="after_rtn_note"
+                                                                id="myInput{{order.id}}"></textarea>
+                                                        </div>
+                                                    </div>
+
+
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add After Rtn
+                                                    Note</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {% for item in obj.order.orderdetails_set.all %}
+                            <a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{item.sku}}</a>
+                            {% endfor %}
+                        </td>
+                        <td class="text-dark fw-bold text-hover-primary fs-6">
+                            {% for item in obj.order.orderdetails_set.all %}
+                            <a href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{item.qty }}</a>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for item in obj.order.orderdetails_set.all %}
+                            <span class="badge badge-light-{% status_color_selector  item.status %} badge-lg">{{item.status}}</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="#"
+                                class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">{{obj.order.total_price}}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <!--end::Table body-->
+            </table>
+            <!--end::Table-->
+        </div>
+        <!--end::Table container-->
+    </div>
+    <!--begin::Body-->
+</div>
+
 {% endblock %}

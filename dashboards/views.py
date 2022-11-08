@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from employees.models import Employee, EmplpyeePoints
 from django.db.models import Avg, Count, Min, Sum
 import csv
-from orders.models import OrderDetails
+from orders.models import OrderDetails, CompleteOrderData
 from logs.models import OrderLog
 from products.models import Product
 """
@@ -25,8 +25,18 @@ class DashboardsView(LoginRequiredMixin, TemplateView):
     # Default template file
     # Refer to dashboards/urls.py file for more pages and template files
     template_name = 'dashboards/tesr_file.html'
-    login_url = '/employees/login/'
+    template_name2 = 'dashboards/employee_home.html'
 
+
+    def get_template_names(self):
+        """
+        Returns a list of template names to be used for the request. Must return
+        a list. May not be called if render_to_response is overridden.
+        """
+        if self.request.user.is_superuser:
+            return [self.template_name]
+        else:
+            return [self.template_name2]
     # Predefined function
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -34,97 +44,136 @@ class DashboardsView(LoginRequiredMixin, TemplateView):
 
         # A function to init the global layout. It is defined in djangoproject/__init__.py file
         context = KTLayout.init(context)
-        today = datetime.strftime(datetime.now(), '%a')
-        today1 = datetime.strftime(datetime.now() - timedelta(1) , '%a')
-        today2 = datetime.strftime(datetime.now() - timedelta(2) , '%a')
-        today3 = datetime.strftime(datetime.now() - timedelta(3) , '%a')
-        today4 = datetime.strftime(datetime.now() - timedelta(4) , '%a')
-        today5 = datetime.strftime(datetime.now() - timedelta(5) , '%a')
-        today6 = datetime.strftime(datetime.now() - timedelta(6) , '%a')
 
-        context['data1'] = [today6, today5, today4, today3, today2, today1, today]
-        
-        # Order in Review
-        now = datetime.now()
-        current_hour = int(now.strftime('%H'))
-        current_day = int(now.strftime('%d'))
-        context['order_in_review'] = NewOrder.objects.filter(in_review= True)
-        total_point_list = []
-        em_list = Employee.objects.all()
-        label_list = []
-        em_points = EmplpyeePoints.objects.filter(created__day=current_day)
-        for em in em_list:
-            label_list.append(em.name)
-            # pass
-            # points = EmplpyeePoints.objects.filter(employee = Employee.objects.get(pk=em.id), created__hour=int(current_hour), created= datetime.today())
-            # points = points.aggregate(total = Sum('total'))
-            hour_list = []
-            points_list = []
+        if self.request.user.is_superuser:
+            today = datetime.strftime(datetime.now(), '%a')
+            today1 = datetime.strftime(datetime.now() - timedelta(1) , '%a')
+            today2 = datetime.strftime(datetime.now() - timedelta(2) , '%a')
+            today3 = datetime.strftime(datetime.now() - timedelta(3) , '%a')
+            today4 = datetime.strftime(datetime.now() - timedelta(4) , '%a')
+            today5 = datetime.strftime(datetime.now() - timedelta(5) , '%a')
+            today6 = datetime.strftime(datetime.now() - timedelta(6) , '%a')
+
+            context['data1'] = [today6, today5, today4, today3, today2, today1, today]
             
-            # context["points"] = points
-            for i in range(9,-1, -1):
-                hour = current_hour-i
-                hour_list.append(hour)
-                points = em_points.filter(employee = Employee.objects.get(pk=em.id), created__hour=int(hour))
-                points = points.aggregate(total = Sum('total'))
+            # Order in Review
+            now = datetime.now()
+            current_hour = int(now.strftime('%H'))
+            current_day = int(now.strftime('%d'))
+            context['order_in_review'] = NewOrder.objects.filter(in_review= True)
+            total_point_list = []
+            em_list = Employee.objects.all()
+            label_list = []
+            em_points = EmplpyeePoints.objects.filter(created__day=current_day)
+            for em in em_list:
+                label_list.append(em.name)
+                # pass
+                # points = EmplpyeePoints.objects.filter(employee = Employee.objects.get(pk=em.id), created__hour=int(current_hour), created= datetime.today())
+                # points = points.aggregate(total = Sum('total'))
+                hour_list = []
+                points_list = []
+                
+                # context["points"] = points
+                for i in range(9,-1, -1):
+                    hour = current_hour-i
+                    hour_list.append(hour)
+                    points = em_points.filter(employee = Employee.objects.get(pk=em.id), created__hour=int(hour))
+                    points = points.aggregate(total = Sum('total'))
 
-                if points['total']:
+                    if points['total']:
 
-                    points_list.append(points['total'])
+                        points_list.append(points['total'])
+                    else:
+
+                        points_list.append(0)
+                    # points_list.append(points['total'])
+
+                total_point_list.append(points_list)
+            context['hour_list'] = hour_list
+            context['points_list'] = points_list
+            context['total_point_list'] = total_point_list
+
+            context['label_list'] = label_list
+            today = datetime.now().date()
+            todays_orders = NewOrder.objects.filter(created_at__date=today)
+
+            sku_count = {}
+            em_count = {}
+            total_order_count = 0
+            total_sku_count = 0
+            for order in todays_orders:
+                total_order_count += 1
+                if order.employee in em_count:
+                    em_count[order.employee] = em_count.get(order.employee) + 1
                 else:
+                    em_count[order.employee] = 1
+                for i in order.orderdetails_set.all():
+                    total_sku_count += i.qty
+                    if i.sku in sku_count:
+                        sku_count[i.sku] = sku_count.get(i.sku) + i.qty
+                    else:
+                        sku_count[i.sku] = i.qty
 
-                    points_list.append(0)
-                # points_list.append(points['total'])
+            sku_count = sorted(sku_count.items(), key=lambda x: x[1], reverse=True) 
+            sku_count = dict(sku_count)
+            limit = 10
+            first_n = dict(zip(list(sku_count.keys())[:limit], list(sku_count.values())[:limit]))
+            context['todays_orders'] = first_n
+            em_count = sorted(em_count.items(), key=lambda x: x[1], reverse=True)
+            em_count = dict(em_count) 
+            em_count = dict(zip(list(em_count.keys())[:limit], list(em_count.values())[:limit]))
+            context['em_count'] = em_count
+            context['total_order_count'] = total_order_count
+            context['total_sku_count'] = total_sku_count
 
-            total_point_list.append(points_list)
-        context['hour_list'] = hour_list
-        context['points_list'] = points_list
-        context['total_point_list'] = total_point_list
+            last_month_date = today - timedelta(30)
+            uns_products = Product.objects.filter(last_sold__lt = last_month_date, stock_qty__gt = 10).order_by('-stock_qty')
+            context['uns_products'] = uns_products
+        else:
+            current_employee = Employee.objects.get(user=self.request.user)
+            company = current_employee.assigned_company
+            com_order_data = CompleteOrderData.objects.filter(final_status="Return", after_verf=False, order__employee = current_employee, order__company = company)
+            context["com_order_data"] = com_order_data
 
-        context['label_list'] = label_list
-        today = datetime.now().date()
-        todays_orders = NewOrder.objects.filter(created_at__date=today)
-
-        sku_count = {}
-        em_count = {}
-        total_order_count = 0
-        total_sku_count = 0
-        for order in todays_orders:
-            total_order_count += 1
-            if order.employee in em_count:
-                em_count[order.employee] = em_count.get(order.employee) + 1
-            else:
-                em_count[order.employee] = 1
-            for i in order.orderdetails_set.all():
-                total_sku_count += i.qty
-                if i.sku in sku_count:
-                    sku_count[i.sku] = sku_count.get(i.sku) + i.qty
-                else:
-                    sku_count[i.sku] = i.qty
-
-        sku_count = sorted(sku_count.items(), key=lambda x: x[1], reverse=True) 
-        sku_count = dict(sku_count)
-        limit = 10
-        first_n = dict(zip(list(sku_count.keys())[:limit], list(sku_count.values())[:limit]))
-        context['todays_orders'] = first_n
-        em_count = sorted(em_count.items(), key=lambda x: x[1], reverse=True)
-        em_count = dict(em_count) 
-        em_count = dict(zip(list(em_count.keys())[:limit], list(em_count.values())[:limit]))
-        context['em_count'] = em_count
-        context['total_order_count'] = total_order_count
-        context['total_sku_count'] = total_sku_count
-
-        last_month_date = today - timedelta(30)
-        print(f"last_month_date: {last_month_date}")
-        uns_products = Product.objects.filter(last_sold__lt = last_month_date, stock_qty__gt = 10).order_by('-stock_qty')
-        context['uns_products'] = uns_products
         return context
+
+    def post(self, request, *args, **kwargs):
+        order_id = request.POST["order_id"]
+        order = NewOrder.objects.get(pk=order_id)
+        after_rtn_note =request.POST["after_rtn_note"]
+        if after_rtn_note == "":
+            messages.add_message(request, messages.ERROR, f'You have to insert a note')
+        else:
+            com_order_data = CompleteOrderData.objects.get(order=order)
+            com_order_data.after_rtn_note = after_rtn_note
+            com_order_data.after_verf = True
+            com_order_data.save()
+            messages.add_message(request, messages.SUCCESS, f'After Rtn Note Added to {order.invoice_number}')
+
+        return redirect('index')
+
+
 
 def approve_order(request, order_id):
     order = NewOrder.objects.get(pk=order_id)
     order.in_review = False
     order.save()
     messages.add_message(request, messages.SUCCESS, f'Order {order.invoice_number} is now approved')
+
+    return redirect('index')
+
+def add_after_rtn_note(request, order_id):
+    order = NewOrder.objects.get(pk=order_id)
+    if request.method == 'POST':
+        after_rtn_note =request.POST["after_rtn_note"]
+        if after_rtn_note == "":
+            messages.add_message(request, messages.ERROR, f'You have to insert a note')
+        else:
+            com_order_data = CompleteOrderData.objects.get(order=order)
+            com_order_data.after_rtn_note = after_rtn_note
+            com_order_data.after_verf = True
+            com_order_data.save()
+            messages.add_message(request, messages.SUCCESS, f'After Rtn Note Added to {order.invoice_number}')
 
     return redirect('index')
 

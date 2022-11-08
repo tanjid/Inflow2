@@ -183,7 +183,7 @@ context.update({
                             </td>
                             <td>
                                 {% for sku in order.orderdetails_set.all %}
-                                <span class="badge badge-light-success">{{sku.status}}</span><br>
+                                <span class="badge badge-light-{% status_color_selector  sku.status %} badge-lg">{{sku.status}}</span><br>
                                 {% endfor %}
                             </td>
                             <td>

@@ -203,7 +203,7 @@
                                                         name="search_contetn_o">
                                                     <label for="" class="form-label">Add Note to
                                                         {{order.invoice_number}}</label>
-                                                    <textarea class="form-control" data-kt-autosize="true"
+                                                    <textarea class="form-control"
                                                         name="new_note">{% if order.note %}{{order.note}}{% endif %}</textarea>
                                                 </div>
 
@@ -242,7 +242,7 @@
                                 <label for="" class="form-label">Add Rtn Note to
                                     {{order.invoice_number}}</label>
                                 <div class="autocomplete">
-                                    <textarea class="form-control aut_sug" data-kt-autosize="true"
+                                    <textarea class="form-control aut_sug"
                                         name="new_return_note"
                                         id="myInput{{order.id}}">{% if order.return_note %}{{order.return_note}}{% endif %}</textarea>
                                 </div>
@@ -274,7 +274,7 @@
 </td>
 <td>
     {% for sku in order.orderdetails_set.all %}
-    <span class="badge badge-light-success">{{sku.status}}</span><br>
+    <span class="badge badge-light-{% status_color_selector  sku.status %} badge-lg">{{sku.status}}</span><br>
     {% endfor %}
 </td>
 <td>
