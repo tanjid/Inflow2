@@ -355,6 +355,8 @@ class OrderListView(LoginRequiredMixin, ListView):
         elif 'invoice' in request.POST:
             multi_order_list = []
             order_list = []
+            status_name = request.POST.get('status')
+
             orders = request.POST.getlist('selected-order')
 
 
@@ -363,7 +365,18 @@ class OrderListView(LoginRequiredMixin, ListView):
                 my_order = NewOrder.objects.get(pk=order)
                 bulk_update_list = []
                 count = 0
-                for order in my_order.orderdetails_set.all():
+                orderdetails = my_order.orderdetails_set.all()
+                # is_print_ok = True
+
+                for order in orderdetails:
+                    if order.status != status_name:
+                        # is_print_ok = False
+                        messages.add_message(request, messages.ERROR, f' Can not Print Because {order.main_order} is in {order.status}. Plz Refresh the Orders Page and Print Again')
+                        return redirect('index')
+                
+                for order in orderdetails:
+
+
                     order.status = "Printed"
                     bulk_update_list.append(order)
 

@@ -326,7 +326,7 @@
 			<!--end:Menu item-->
 			<!--begin: Reports Menu item-->
 			{% if current_user.reports %}
-			<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+			<div data-kt-menu-trigger="click" class="menu-item menu-accordion{% if '/reports/' in request.path %} show{% endif %}">
 				<!--begin:Menu link-->
 				<span class="menu-link">
 					<span class="menu-icon">{% getSvgIcon 'duotune/graphs/gra010.svg' 'svg-icon svg-icon-2' %}</span>
@@ -336,30 +336,33 @@
 				<!--end:Menu link-->
 				<!--begin:Menu sub-->
 				<div class="menu-sub menu-sub-accordion menu-active-bg">
+
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<!--begin:Menu link-->
-						<a class="menu-link" href="{% url 'login' %}">
+						<a class="menu-link {% if request.path == '/reports/' %}active{% endif %}" href="{% url 'reports_home' %}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">Login</span>
+							<span class="menu-title">Home</span>
 						</a>
 						<!--end:Menu link-->
 					</div>
 					<!--end:Menu item-->
+
 					<!--begin:Menu item-->
 					<div class="menu-item">
 						<!--begin:Menu link-->
-						<a class="menu-link" href="?page=pages/faq/extended">
+						<a class="menu-link {% if request.path == '/reports/product_report' %}active{% endif %}" href="{% url 'product_report' %}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
-							<span class="menu-title">FAQ Extended</span>
+							<span class="menu-title">Product</span>
 						</a>
 						<!--end:Menu link-->
 					</div>
 					<!--end:Menu item-->
+
 				</div>
 				<!--end:Menu sub-->
 			</div>

@@ -32,7 +32,7 @@ DEBUG = True
 # ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['127.0.0.1']
 
-ALLOWED_HOSTS = ["139.162.31.136", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["139.162.31.136", "localhost", "127.0.0.1", "139.162.39.210"]
 
 
 # Application definition
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'storages',
     'logs',
+    'reports',
 ]
 LOGIN_EXEMPT_URLS = ('assets/plugins/global/plugins.bundle.css', 'assets/css/style.bundle.css', 'forgot-password',)
 LOGIN_URL = '/employees/login/'
